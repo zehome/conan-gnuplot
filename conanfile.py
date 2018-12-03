@@ -11,7 +11,7 @@ class GnuPlotConan(ConanFile):
     version = "5.2.5"
     description = "GNUplot"
     topics = "conan", "gnuplot"
-    url = "http://www.gnuplot.info/"
+    url = "https://github.com/zehome/conan-gnuplot"
     homepage = "http://www.gnuplot.info/"
     author = "Laurent Coustet <ed@zehome.com>"
     license = "GPL-3.0-only"
