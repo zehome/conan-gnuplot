@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from conans import ConanFile, tools
+from conans import ConanFile, tools, AutoToolsBuildEnvironment
 import os
 import shutil
 
@@ -40,7 +40,14 @@ class GnuPlotConan(ConanFile):
                     self.run("{0} && set && nmake".format(
                         tools.vcvars_command(self.settings)))
         else:
-            raise NotImplementedError
+            with tools.chdir(self._source_subfolder):
+                autotools = AutoToolsBuildEnvironment(self)
+                autotools.configure(args=["--without-qt", "--without-cairo", "--without-lua", "--without-readline", "--without-latex", "--without-libcerf", "--without-x"])
+                autotools.make()
+                # autotools.install()
 
     def package(self):
-        self.copy("*.exe", src=os.path.join(self._source_subfolder, "config", "msvc"), dst="bin")
+        if self.settings.os == "Windows":
+            self.copy("*.exe", src=os.path.join(self._source_subfolder, "config", "msvc"), dst="bin")
+        else:
+            self.copy("gnuplot*", src=os.path.join(self._source_subfolder, "src"), dst="bin")
